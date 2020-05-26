@@ -21,6 +21,14 @@ class FuncTest {
   def test(): Unit = {
     val now = OwnUtils.getTimeNow()
     Assert.assertTrue(now(4) == '-')
+
+    val digitx = """/info/\d+/c/(\d+)""".r
+
+    val url = "/info/1012249417/c/17"
+    url match {
+      case digitx(url) => println(url + " is Digit")
+      case _           => println("it is something else")
+    }
   }
 
 }

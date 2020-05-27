@@ -38,9 +38,9 @@ class GrizzlyHttpTest extends FunSuite with MockFactory with BeforeAndAfter {
         val resp = Http(url = "http://%s:%s/".format(OwnConfig.SERVER_HOST, OwnConfig.HTTP_SERVER_PORT))
           .header("Authorization", OwnConfig._AUTH64) // default Method is `GET`
           .param("names", "斗破苍穹,武动乾坤")
-          .param("size", "2")
-          .param("factor", "11")
-          .param("k", "4")
+          .param("size", "12")
+          .param("factor", "2")
+          .param("k", "10")
           .timeout(OwnConfig.TIMEOUT_MILLS, OwnConfig.TIMEOUT_MILLS)
           .asString
 

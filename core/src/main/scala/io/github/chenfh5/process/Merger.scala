@@ -55,6 +55,7 @@ class Merger(amplifyFactor: Int = 2) {
     }.toMap
   }
 
+  // (name -> (bookListUrl -> (bookName, weight)))
   def _map2Weight(map: Map[String, Map[Long, Map[String, Int]]]): List[BookWeight] = {
     val res = map.map {
       case (n, m) =>
@@ -63,7 +64,18 @@ class Merger(amplifyFactor: Int = 2) {
         }.toList
         (n, tmp)
     }
-    res.map(e => BookWeight(e._1, e._2.flatten.toMap)).toList
+
+    val res2 = res.map {
+      case (k, m) =>
+        val tmp = m.flatten
+        val tmp2 = tmp.groupBy(e => e._1)
+        val tmp3 = tmp2.map(e => (e._1, e._2.map(_._2)))
+        val tmp4 = tmp3.map(e => (e._1, e._2.sum))
+        val tmp5 = tmp4 - k // remove self
+        BookWeight(k, tmp5)
+    }.toList
+
+    res2
   }
 
 }

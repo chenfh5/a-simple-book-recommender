@@ -34,7 +34,7 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
             case bookUrlPattern(_*) =>
               url
             case _ =>
-              LOG.debug("url=%s is not match".format(url))
+              if (LOG.isDebugEnabled) LOG.debug("url=%s is not match".format(url))
               ""
           }
         }
@@ -87,7 +87,7 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
       case Book(n, u, p, _) =>
         val res = (0 to p).par.map { d => // 403 Forbidden
           val url = "%s/%d".format(u, d)
-          LOG.debug("searching url=%s".format(url))
+          if (LOG.isDebugEnabled) LOG.debug("searching url=%s".format(url))
           val doc = Jsoup.connect(url).get
           val headlines = doc.select("div.panel-footer a")
           val tmp = headlines.asScala.map { h =>
@@ -96,7 +96,7 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
               case bookListUrlPattern(url) =>
                 url.toLong
               case _ =>
-                LOG.debug("url=%s is not match".format(url))
+                if (LOG.isDebugEnabled) LOG.debug("url=%s is not match".format(url))
                 -1
             }
           }
@@ -119,14 +119,14 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
         val input =
           if (bl.size <= maxBookListContentSize) bl
           else {
-            LOG.info("need random pick")
+            if (LOG.isDebugEnabled) LOG.debug("need random pick")
             Random.shuffle(bl).take(maxBookListContentSize)
           }
         val tmp = input.par
           .map {
             case BookList(u, _) =>
               val url = "%s/%d".format(bookListUrl, u)
-              LOG.debug("search booklist url=%s".format(url))
+              if (LOG.isDebugEnabled) LOG.debug("search booklist url=%s".format(url))
               val name = try {
                 val doc = Jsoup.connect(url).get
                 val headlines = doc.select("div.media-body a h4")

@@ -18,6 +18,10 @@ class MergerTest extends FunSuite with MockFactory with BeforeAndAfter {
     Book("n1", "u1", 1, List(BookList(11, List("bl1", "n1")))),
     Book("n2", "u2", 2, List(BookList(22, List("bl2", "n2", "n1")))))
 
+  val input3 = List(
+    Book("n1", "u1", 1, List(BookList(11, List("bl1", "n1")), BookList(12, List("bl2", "n1")))),
+    Book("n2", "u2", 2, List(BookList(21, List("bl1", "n2", "n1")), BookList(22, List("bl2", "n2", "n3")))))
+
   before {
     LOG.info("this is the test begin={}", OwnUtils.getTimeNow())
   }
@@ -61,13 +65,15 @@ class MergerTest extends FunSuite with MockFactory with BeforeAndAfter {
 
   test("success map2Weight") {
     val o1 = new Merger(4)
-    val input3 = o1.assignWeight(input2)
-    val res = o1._map2Weight(input3)
+    val tmp = o1.assignWeight(input3)
+    val res = o1._map2Weight(tmp)
 
     println(res)
     assert(res.size == 2)
-    assert(res.last.name == "n2")
-    assert(res.last.similar("n2") == 9)
+    assert(res.filter(e => e.name == "n1").head.similar("bl1") == 1)
+    assert(res.filter(e => e.name == "n1").head.similar("bl2") == 1)
+    assert(res.filter(e => e.name == "n2").head.similar("bl1") == 9)
+    assert(res.filter(e => e.name == "n2").head.similar("bl2") == 1)
   }
 
 }

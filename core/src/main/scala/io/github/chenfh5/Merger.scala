@@ -69,21 +69,3 @@ class Merger(amplifyFactor: Int = 2) {
   }
 
 }
-
-object Merger {
-
-  def main(args: Array[String]): Unit = {
-    val input = {
-      val in = new ObjectInputStream(new FileInputStream("test.dat"))
-      val obj = in.readObject()
-      in.close()
-      obj.asInstanceOf[List[Book]]
-    }
-
-//    println(input)
-    val o = new Merger(3)
-    val res = o.map2Weight(o.assignWeight(input))
-    println(res)
-
-  }
-}

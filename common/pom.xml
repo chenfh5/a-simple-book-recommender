@@ -74,6 +74,10 @@
                     <skipTests>false</skipTests>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 

@@ -1,0 +1,25 @@
+name: scala-auto-test-example-ci
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print begin greet
+        run: echo begin Github Action CI at `date`
+
+      - name: checkout code
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: run tests
+        run: mvn clean package
+
+      - name: print end greet
+        run: echo end Github Action CI at `date`

@@ -27,11 +27,23 @@
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.target.version}</artifactId>
         </dependency>
-
+        <!--HTML parser-->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.13.1</version>
+        </dependency>
+        <!--grizzly http-->
+        <dependency>
+            <groupId>org.glassfish.grizzly</groupId>
+            <artifactId>grizzly-http-server</artifactId>
+        </dependency>
+        <!--for client call only, It could Raw Java HttpURLConnection-->
+        <!--https://stackoverflow.com/questions/11719373/doing-http-request-in-scala-->
+        <dependency>
+            <groupId>org.scalaj</groupId>
+            <artifactId>scalaj-http_${scala.source.version}</artifactId>
+            <version>2.4.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

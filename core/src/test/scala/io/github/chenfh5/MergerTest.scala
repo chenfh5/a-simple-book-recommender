@@ -1,5 +1,7 @@
 package io.github.chenfh5
 
+import io.github.chenfh5.conf.{Book, BookList}
+import io.github.chenfh5.process.Merger
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.slf4j.LoggerFactory
@@ -26,7 +28,7 @@ class MergerTest extends FunSuite with MockFactory with BeforeAndAfter {
 
   test("success initWeight") {
     val o1 = new Merger(4)
-    val res = o1.initWeight(input)
+    val res = o1._initWeight(input)
 
     println(res)
     assert(res.size == 2)
@@ -60,7 +62,7 @@ class MergerTest extends FunSuite with MockFactory with BeforeAndAfter {
   test("success map2Weight") {
     val o1 = new Merger(4)
     val input3 = o1.assignWeight(input2)
-    val res = o1.map2Weight(input3)
+    val res = o1._map2Weight(input3)
 
     println(res)
     assert(res.size == 2)

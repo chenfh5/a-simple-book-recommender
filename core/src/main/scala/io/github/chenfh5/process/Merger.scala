@@ -1,5 +1,6 @@
-package io.github.chenfh5
+package io.github.chenfh5.process
 
+import io.github.chenfh5.conf.{Book, BookList, BookWeight}
 import org.slf4j.LoggerFactory
 
 class Merger(amplifyFactor: Int = 2) {
@@ -13,7 +14,7 @@ class Merger(amplifyFactor: Int = 2) {
     */
   def assignWeight(books: List[Book]): Map[String, Map[Long, Map[String, Int]]] = {
     // init weight
-    val weightMap = initWeight(books)
+    val weightMap = _initWeight(books)
 
     // assign weight
     val favorBooks = books.map(_.name)
@@ -42,7 +43,7 @@ class Merger(amplifyFactor: Int = 2) {
   }
 
   // convert books to Map in convenience of weight assignment
-  def initWeight(books: List[Book]): Map[String, Map[Long, Map[String, Int]]] = {
+  def _initWeight(books: List[Book]): Map[String, Map[Long, Map[String, Int]]] = {
     books.map {
       case Book(n, _, _, bl) =>
         val tmp = bl.map {
@@ -54,7 +55,7 @@ class Merger(amplifyFactor: Int = 2) {
     }.toMap
   }
 
-  def map2Weight(map: Map[String, Map[Long, Map[String, Int]]]): List[BookWeight] = {
+  def _map2Weight(map: Map[String, Map[Long, Map[String, Int]]]): List[BookWeight] = {
     val res = map.map {
       case (n, m) =>
         val tmp = m.map {

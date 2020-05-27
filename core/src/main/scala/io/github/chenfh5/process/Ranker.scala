@@ -1,5 +1,6 @@
-package io.github.chenfh5
+package io.github.chenfh5.process
 
+import io.github.chenfh5.conf.BookWeight
 import org.slf4j.LoggerFactory
 
 class Ranker(k: Int = 11) {

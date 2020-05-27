@@ -1,5 +1,7 @@
 package io.github.chenfh5
 
+import io.github.chenfh5.conf.Book
+import io.github.chenfh5.process.Fetcher
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.slf4j.LoggerFactory
@@ -9,7 +11,7 @@ class FetcherTest extends FunSuite with MockFactory with BeforeAndAfter {
   private val obj = stub[Fetcher]
 
   before {
-    (obj.getBookIdFromGoogle _).when().returns(List(Book("n1", "u1"), Book("n2", "u2")))
+    (obj._getBookIdFromGoogle _).when().returns(List(Book("n1", "u1"), Book("n2", "u2")))
     LOG.info("this is the test begin={}", OwnUtils.getTimeNow())
   }
 
@@ -18,7 +20,7 @@ class FetcherTest extends FunSuite with MockFactory with BeforeAndAfter {
   }
 
   test("getBookIdFromGoogle success") {
-    val res = obj.getBookIdFromGoogle
+    val res = obj._getBookIdFromGoogle
     println(res)
     assert(res.size == 2)
   }

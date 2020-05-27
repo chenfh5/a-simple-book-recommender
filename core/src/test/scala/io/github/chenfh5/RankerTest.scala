@@ -1,5 +1,7 @@
 package io.github.chenfh5
 
+import io.github.chenfh5.conf.BookWeight
+import io.github.chenfh5.process.Ranker
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FunSuite}
 import org.slf4j.LoggerFactory

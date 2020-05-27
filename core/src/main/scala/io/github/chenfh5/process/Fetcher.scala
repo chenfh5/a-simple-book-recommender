@@ -1,5 +1,7 @@
-package io.github.chenfh5
+package io.github.chenfh5.process
 
+import io.github.chenfh5.conf
+import io.github.chenfh5.conf.{Book, BookList}
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 
@@ -10,12 +12,12 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
 
   private val LOG = LoggerFactory.getLogger(getClass)
   private val prefix = "https://www.google.com/search?q=site%3Awww.qidiantu.com%2Finfo+"
-  private val bookUrlPattern = """(http|https)://www.qidiantu.com/info/\d+/c""".r
+  private val bookUrlPattern = """(http|https)://www.qidiantu.com/info/\d+/(c|c/\d+)""".r
   private val pageNumPattern = """/info/\d+/c/(\d+)""".r
   private val bookListUrlPattern = """/booklist/(\d+)""".r
   private val bookListUrl = "https://www.qidiantu.com/booklist"
 
-  def getBookIdFromGoogle: List[Book] = {
+  def _getBookIdFromGoogle: List[Book] = {
     val t0 = System.nanoTime()
     val res = queryBooks
       .map(_.trim)
@@ -48,33 +50,37 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
     res
   }
 
-  def getPageNum: List[Book] = {
+  private def getPageNum: List[Book] = {
     val t0 = System.nanoTime()
-    val books = getBookIdFromGoogle
-    val res = books.par.map {
-      case Book(n, u, _, _) =>
-        val doc = Jsoup.connect(u).get
-        val headlines = doc.select("ul.pagination a")
-        val tmp = headlines.asScala.map { h =>
-          val url = h.attr("href")
-          url match {
-            case pageNumPattern(url) =>
-              url.toInt
-            case _ =>
-              LOG.debug("url=%s is not match".format(url))
-              -1
+    val books = _getBookIdFromGoogle
+    val res = books.par
+      .map {
+        case Book(n, u, _, _) =>
+          val doc = Jsoup.connect(u).get
+          val headlines = doc.select("ul.pagination a")
+          val tmp = headlines.asScala.map { h =>
+            val url = h.attr("href")
+            url match {
+              case pageNumPattern(url) =>
+                url.toInt
+              case _ =>
+                LOG.warn("url=%s is not match".format(url))
+                -1
+            }
           }
-        }
-        Book(n, u, tmp.max) // only get max page number
-    }.toList
+          if (tmp.nonEmpty) Book(n, u, tmp.max) // only get max page number
+          else Book("", "")
+      }
+      .filter(_.name.nonEmpty)
+      .filter(_.url.nonEmpty)
+      .toList
 
     val durationInSec = (System.nanoTime - t0) / 1e9d
-    if (LOG.isDebugEnabled) LOG.debug("hit pageNum=%s".format(res))
-    else LOG.info("finish at %s".format(durationInSec))
+    LOG.info("hit pageNum=%s, finish at %s".format(res, durationInSec))
     res
   }
 
-  def getBookListUrl: List[Book] = {
+  private def getBookListUrl: List[Book] = {
     val t0 = System.nanoTime()
     val books = getPageNum
     val res = books.par.map {
@@ -96,7 +102,7 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
           }
           tmp.filter(_ != -1)
         }.toList
-        Book(n, u, p, res.flatten.map(e => BookList(e)))
+        conf.Book(n, u, p, res.flatten.map(e => BookList(e)))
     }.toList
 
     val durationInSec = (System.nanoTime - t0) / 1e9d
@@ -134,7 +140,7 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
           }
           .filter(_.names.nonEmpty)
           .toList
-        Book(n, u, p, tmp)
+        conf.Book(n, u, p, tmp)
     }.toList
 
     val durationInSec = (System.nanoTime - t0) / 1e9d

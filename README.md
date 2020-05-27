@@ -1,3 +1,5 @@
+![](https://github.com/chenfh5/a-simple-book-recommender/workflows/ci/badge.svg)
+
 # a-simple-book-recommender
 > base on book lists, to find the most similar books according to your favorite book
 

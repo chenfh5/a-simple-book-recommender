@@ -1,4 +1,4 @@
-name: scala-auto-test-example-ci
+name: ci
 on: [push]
 
 jobs:

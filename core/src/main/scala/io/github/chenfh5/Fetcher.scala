@@ -7,6 +7,7 @@ import scala.collection.JavaConverters._
 import scala.util.Random
 
 class Fetcher(queryBooks: List[String]) {
+
   private val LOG = LoggerFactory.getLogger(getClass)
   private val prefix = "https://www.google.com/search?q=site%3Awww.qidiantu.com%2Finfo+"
   private val bookUrlPattern = """(http|https)://www.qidiantu.com/info/\d+/c""".r
@@ -14,11 +15,13 @@ class Fetcher(queryBooks: List[String]) {
   private val bookListUrlPattern = """/booklist/(\d+)""".r
   private val bookListUrl = "https://www.qidiantu.com/booklist"
 
-  private val maxBookListContentSize = 10
+  private val maxBookListContentSize = 2
 
-  def getBookIdFromGoogle: Books = {
+  def getBookIdFromGoogle: List[Book] = {
     val t0 = System.nanoTime()
-    val res = queryBooks.par
+    val res = queryBooks
+      .map(_.trim)
+      .par
       .map { n =>
         val url = "%s%s".format(prefix, n)
         LOG.info("url=%s".format(url))
@@ -44,13 +47,13 @@ class Fetcher(queryBooks: List[String]) {
     val durationInSec = (System.nanoTime - t0) / 1e9d
     if (LOG.isDebugEnabled) LOG.debug("hit book url=%s".format(res))
     else LOG.info("finish at %s".format(durationInSec))
-    Books(res)
+    res
   }
 
-  def getPageNum: Books = {
+  def getPageNum: List[Book] = {
     val t0 = System.nanoTime()
     val books = getBookIdFromGoogle
-    val res = books.books.par.map {
+    val res = books.par.map {
       case Book(n, u, _, _) =>
         val doc = Jsoup.connect(u).get
         val headlines = doc.select("ul.pagination a")
@@ -70,13 +73,13 @@ class Fetcher(queryBooks: List[String]) {
     val durationInSec = (System.nanoTime - t0) / 1e9d
     if (LOG.isDebugEnabled) LOG.debug("hit pageNum=%s".format(res))
     else LOG.info("finish at %s".format(durationInSec))
-    Books(res)
+    res
   }
 
-  def getBookListUrl: Books = {
+  def getBookListUrl: List[Book] = {
     val t0 = System.nanoTime()
     val books = getPageNum
-    val res = books.books.par.map {
+    val res = books.par.map {
       case Book(n, u, p, _) =>
         val res = (0 to p).par.map { d => // 403 Forbidden
           val url = "%s/%d".format(u, d)
@@ -101,13 +104,13 @@ class Fetcher(queryBooks: List[String]) {
     val durationInSec = (System.nanoTime - t0) / 1e9d
     if (LOG.isDebugEnabled) LOG.debug("hit bookList url=%s".format(res))
     else LOG.info("finish at %s".format(durationInSec))
-    Books(res)
+    res
   }
 
-  def getBookListContent: Books = {
+  def getBookListContent: List[Book] = {
     val t0 = System.nanoTime()
     val books = getBookListUrl
-    val res = books.books.par.map {
+    val res = books.par.map {
       case Book(n, u, p, bl) =>
         val input =
           if (bl.size <= maxBookListContentSize) bl
@@ -123,7 +126,7 @@ class Fetcher(queryBooks: List[String]) {
               val name = try {
                 val doc = Jsoup.connect(url).get
                 val headlines = doc.select("div.media-body a h4")
-                headlines.asScala.map(h => h.text()).toList
+                headlines.asScala.map(h => h.text().trim).toList.filter(_.nonEmpty)
               } catch {
                 case e: Throwable =>
                   LOG.warn("get content failed %s".format(e.getMessage))
@@ -139,7 +142,7 @@ class Fetcher(queryBooks: List[String]) {
     val durationInSec = (System.nanoTime - t0) / 1e9d
     if (LOG.isDebugEnabled) LOG.debug("hit bookList content=%s".format(res))
     else LOG.info("finish at %s".format(durationInSec))
-    Books(res)
+    res
   }
 
 }

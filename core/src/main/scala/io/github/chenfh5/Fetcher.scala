@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
 import scala.util.Random
 
-class Fetcher(queryBooks: List[String]) {
+class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
 
   private val LOG = LoggerFactory.getLogger(getClass)
   private val prefix = "https://www.google.com/search?q=site%3Awww.qidiantu.com%2Finfo+"
@@ -14,8 +14,6 @@ class Fetcher(queryBooks: List[String]) {
   private val pageNumPattern = """/info/\d+/c/(\d+)""".r
   private val bookListUrlPattern = """/booklist/(\d+)""".r
   private val bookListUrl = "https://www.qidiantu.com/booklist"
-
-  private val maxBookListContentSize = 2
 
   def getBookIdFromGoogle: List[Book] = {
     val t0 = System.nanoTime()

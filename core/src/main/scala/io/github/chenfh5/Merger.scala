@@ -1,7 +1,5 @@
 package io.github.chenfh5
 
-import java.io.{FileInputStream, ObjectInputStream}
-
 import org.slf4j.LoggerFactory
 
 class Merger(amplifyFactor: Int = 2) {
@@ -60,8 +58,7 @@ class Merger(amplifyFactor: Int = 2) {
     val res = map.map {
       case (n, m) =>
         val tmp = m.map {
-          case (_, bl) =>
-            bl
+          case (_, bl) => bl
         }.toList
         (n, tmp)
     }

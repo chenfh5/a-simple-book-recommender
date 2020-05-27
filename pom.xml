@@ -54,9 +54,9 @@
             </dependency>
             <!--Testing Frameworks-->
             <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>6.14.3</version>
+                <groupId>org.scalamock</groupId>
+                <artifactId>scalamock_${scala.target.version}</artifactId>
+                <version>4.4.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

@@ -20,8 +20,8 @@
         </dependency>
         <!--Testing Frameworks-->
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
+            <groupId>org.scalamock</groupId>
+            <artifactId>scalamock_${scala.target.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>

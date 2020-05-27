@@ -11,7 +11,7 @@ object Bootstrap {
     val t0 = System.nanoTime()
 
     // exec
-    val favorBookList = List("斗破苍穹", "武动乾坤")
+    val favorBookList = List("斗破苍穹", "武动乾坤", "大主宰")
     val bc = new Fetcher(favorBookList, 100).getBookListContent
     val obj = new Merger(4)
     val bw = obj._map2Weight(obj.assignWeight(bc))

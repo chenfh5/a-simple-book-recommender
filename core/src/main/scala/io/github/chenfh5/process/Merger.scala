@@ -29,7 +29,7 @@ class Merger(amplifyFactor: Int = 2) {
                 if (tmp.contains(false)) (url, bl)
                 else {
                   // assign to 10X
-                  LOG.info("bookList = %s need amplify".format(url))
+                  if (LOG.isDebugEnabled) LOG.debug("bookList = %s need amplify".format(url))
                   (url, bl.map(e => (e._1, e._2 + favorBooks.size * amplifyFactor)))
                 }
             }

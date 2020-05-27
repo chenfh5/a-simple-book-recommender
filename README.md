@@ -1,6 +1,7 @@
 # a-simple-book-recommender
+> base on book lists, to find the most similar books according to your favorite book
 
-## diagram
+## Diagram
 ![a simple book recommender](https://user-images.githubusercontent.com/8369671/83042682-82d6ff00-a074-11ea-8713-761b41f23db0.png)
 
 ## QuickStart
@@ -12,6 +13,9 @@
 - distribution/LB/routing (to get greater throughput)
 - deployment
 - layout refactor
+
+## Snapshot
+![snapshot](https://user-images.githubusercontent.com/8369671/83057194-2c27f000-a089-11ea-9c63-c170f038ec87.png)
 
 ## Reference
 0. [jsoup: Java HTML Parser](https://jsoup.org/)

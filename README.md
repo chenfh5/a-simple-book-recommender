@@ -1,7 +1,7 @@
 # a-simple-book-recommender
 
 ## diagram
-![a simple book recommender](https://user-images.githubusercontent.com/8369671/83041313-eceea480-a072-11ea-9711-0dc386b7a414.png)
+![a simple book recommender](https://user-images.githubusercontent.com/8369671/83042682-82d6ff00-a074-11ea-8713-761b41f23db0.png)
 
 ## QuickStart
 - Bootstrap OR UT-GrizzlyHttpTest

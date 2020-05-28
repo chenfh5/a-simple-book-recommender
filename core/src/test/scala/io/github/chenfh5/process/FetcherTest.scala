@@ -1,7 +1,7 @@
-package io.github.chenfh5
+package io.github.chenfh5.process
 
+import io.github.chenfh5.OwnUtils
 import io.github.chenfh5.conf.Book
-import io.github.chenfh5.process.Fetcher
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite

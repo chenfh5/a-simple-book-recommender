@@ -1,4 +1,4 @@
-package io.github.chenfh5.http
+package io.github.chenfh5
 
 import io.github.chenfh5.http.server.G2Server
 import io.github.chenfh5.process.{Fetcher, Merger, Ranker}
@@ -10,8 +10,8 @@ object Bootstrap {
   private val LOG = LoggerFactory.getLogger(getClass)
 
   def main(args: Array[String]): Unit = {
-    dryRunOnce()
-//    dryRunServer
+//    dryRunOnce()
+    dryRunServer
   }
 
   def dryRunOnce(): Unit = {

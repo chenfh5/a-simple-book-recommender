@@ -1,7 +1,7 @@
-package io.github.chenfh5
+package io.github.chenfh5.process
 
+import io.github.chenfh5.OwnUtils
 import io.github.chenfh5.conf.BookWeight
-import io.github.chenfh5.process.Ranker
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite

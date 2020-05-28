@@ -1,7 +1,7 @@
-package io.github.chenfh5
+package io.github.chenfh5.process
 
+import io.github.chenfh5.OwnUtils
 import io.github.chenfh5.conf.{Book, BookList}
-import io.github.chenfh5.process.Merger
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite

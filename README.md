@@ -17,9 +17,10 @@
 - layout refactor
 
 ## Snapshot
-![snapshot](https://user-images.githubusercontent.com/8369671/83057194-2c27f000-a089-11ea-9c63-c170f038ec87.png)
+![snapshot](https://user-images.githubusercontent.com/8369671/83148380-795c9e00-a12b-11ea-86ad-9e7a0298a2a5.png)
 
 ## Reference
 0. [jsoup: Java HTML Parser](https://jsoup.org/)
 0. [Scraping Websites using Scala and Jsoup](https://www.lihaoyi.com/post/ScrapingWebsitesusingScalaandJsoup.html)
 0. [wtog-web-crawler](https://github.com/wtog/web-crawler)
+0. [blog](https://chenfh5.github.io/2020/05/28/00_book-recommender.html)

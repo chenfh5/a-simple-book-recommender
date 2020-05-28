@@ -4,10 +4,17 @@ import io.github.chenfh5.http.server.G2Server
 import io.github.chenfh5.process.{Fetcher, Merger, Ranker}
 import org.slf4j.LoggerFactory
 
+import scala.io.StdIn
+
 object Bootstrap {
   private val LOG = LoggerFactory.getLogger(getClass)
 
   def main(args: Array[String]): Unit = {
+    dryRunOnce
+//    dryRunServer
+  }
+
+  def dryRunOnce: Unit = {
     val t0 = System.nanoTime()
 
     // exec
@@ -26,14 +33,14 @@ object Bootstrap {
     }
   }
 
-  def dryRun: Int = {
+  // @see http://localhost:8086/?names=斗破苍穹,武动乾坤&size=2&factor=11&k=21
+  // @see http://localhost:8086/?names=斗破苍穹,武动乾坤
+  def dryRunServer: String = {
     val g2Server = G2Server()
     g2Server.init()
     g2Server.start()
-    val url = """http://localhost:8086/?names=斗破苍穹,武动乾坤&size=2&factor=11&k=21"""
-    val url2 = """http://localhost:8086/?names=斗破苍穹,武动乾坤"""
-    LOG.info("Press any key to stop the server...")
-    System.in.read()
+    LOG.info("Press entry key to stop the server...")
+    StdIn.readLine()
   }
 
 }

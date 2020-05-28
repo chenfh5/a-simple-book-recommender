@@ -16,6 +16,7 @@ trait HandlerTrait extends HttpHandler {
     }
     request.setCharacterEncoding(StandardCharsets.UTF_8.toString)
     response.setCharacterEncoding(StandardCharsets.UTF_8.toString)
+    response.setContentType("text/plain")
 
     // real dispatch
     val method = request.getMethod

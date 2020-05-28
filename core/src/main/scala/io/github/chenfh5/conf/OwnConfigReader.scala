@@ -17,8 +17,6 @@ object OwnConfigReader {
     var NEED_AUTH = getAsBoolean("NEED_AUTH")
     var _AUTH64 = getAsStr("_AUTH64")
 
-    var TIMEOUT_MILLS = getAsInt("TIMEOUT_MILLS")
-
     override def toString: String = super.toString
   }
 

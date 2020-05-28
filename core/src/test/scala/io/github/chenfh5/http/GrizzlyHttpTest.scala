@@ -41,19 +41,18 @@ class GrizzlyHttpTest extends FunSuite with MockFactory with BeforeAndAfter {
           .param("size", "12")
           .param("factor", "2")
           .param("k", "10")
-          .timeout(OwnConfig.TIMEOUT_MILLS, OwnConfig.TIMEOUT_MILLS)
+          .timeout(3000, 60000)
           .asString
 
         LOG.info("resp=%s".format(resp.body))
         assert(resp.code == 200)
-
         g2Server.stop()
     }
   }
 
   test("google http call process success but Exception") {
     val url = "https://www.google.com/search?q=site%3Awww.qidiantu.com%2Finfo+斗破苍穹"
-    val resp = Http(url = url).timeout(OwnConfig.TIMEOUT_MILLS, OwnConfig.TIMEOUT_MILLS).asString
+    val resp = Http(url = url).timeout(3000, 60000).asString
 
     println(resp)
     println(resp.code)

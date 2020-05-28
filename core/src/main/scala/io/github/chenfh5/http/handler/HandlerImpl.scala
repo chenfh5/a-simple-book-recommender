@@ -36,13 +36,11 @@ class HandlerImpl extends HandlerTrait {
         e._2.foreach(e => response.getWriter.write("%s\n".format(e)))
       }
     }
-    else {
-      response.getWriter.write("favorBookList=%s is not valid\n".format(favorBookList))
-    }
+    else response.getWriter.write("favorBookList=%s is not valid\n".format(favorBookList))
 
-    response.finish()
     val durationInSec = (System.nanoTime - t0) / 1e9d
     LOG.info("finish at %s".format(durationInSec))
+    response.finish()
   }
 
   override def doPost(request: Request, response: Response): Unit = ???

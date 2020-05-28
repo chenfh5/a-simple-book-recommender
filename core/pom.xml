@@ -41,8 +41,8 @@
         <!--https://stackoverflow.com/questions/11719373/doing-http-request-in-scala-->
         <dependency>
             <groupId>org.scalaj</groupId>
-            <artifactId>scalaj-http_${scala.source.version}</artifactId>
-            <version>2.4.1</version>
+            <artifactId>scalaj-http_${scala.target.version}</artifactId>
+            <version>2.4.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

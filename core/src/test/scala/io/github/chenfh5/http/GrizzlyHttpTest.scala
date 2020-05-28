@@ -4,11 +4,14 @@ import io.github.chenfh5.OwnUtils
 import io.github.chenfh5.conf.OwnConfigReader.OwnConfig
 import io.github.chenfh5.http.server.G2Server
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.BeforeAndAfter
+import org.scalatest.funsuite.AnyFunSuite
 import org.slf4j.LoggerFactory
 import scalaj.http.Http
 
-class GrizzlyHttpTest extends FunSuite with MockFactory with BeforeAndAfter {
+import scala.collection.parallel.CollectionConverters._
+
+class GrizzlyHttpTest extends AnyFunSuite with MockFactory with BeforeAndAfter {
   private val LOG = LoggerFactory.getLogger(getClass)
 
   before {
@@ -37,10 +40,11 @@ class GrizzlyHttpTest extends FunSuite with MockFactory with BeforeAndAfter {
         println(s"wait for server bootstrap thread id=${Thread.currentThread().getId}")
         val resp = Http(url = "http://%s:%s/".format(OwnConfig.SERVER_HOST, OwnConfig.HTTP_SERVER_PORT))
           .header("Authorization", OwnConfig._AUTH64) // default Method is `GET`
-          .param("names", "斗破苍穹,武动乾坤")
-          .param("size", "12")
-          .param("factor", "2")
-          .param("k", "10")
+          .param("favorBookList", "斗破苍穹,武动乾坤")
+          .param("maxBookListSize", "12")
+          .param("maxBookListContentSize", "80")
+          .param("amplifyFactor", "2")
+          .param("topK", "10")
           .timeout(3000, 60000)
           .asString
 

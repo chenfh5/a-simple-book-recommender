@@ -3,20 +3,17 @@ package io.github.chenfh5
 import io.github.chenfh5.conf.{Book, BookList}
 import io.github.chenfh5.process.Merger
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.BeforeAndAfter
+import org.scalatest.funsuite.AnyFunSuite
 import org.slf4j.LoggerFactory
 
-class MergerTest extends FunSuite with MockFactory with BeforeAndAfter {
+class MergerTest extends AnyFunSuite with MockFactory with BeforeAndAfter {
   private val LOG = LoggerFactory.getLogger(getClass)
 
   val input =
-    List(
-      Book("n1", "u1", 1, List(BookList(11, List("bl1", "n1")))),
-      Book("n2", "u2", 2, List(BookList(22, List("bl2", "n2")))))
+    List(Book("n1", "u1", 1, List(BookList(11, List("bl1", "n1")))), Book("n2", "u2", 2, List(BookList(22, List("bl2", "n2")))))
 
-  val input2 = List(
-    Book("n1", "u1", 1, List(BookList(11, List("bl1", "n1")))),
-    Book("n2", "u2", 2, List(BookList(22, List("bl2", "n2", "n1")))))
+  val input2 = List(Book("n1", "u1", 1, List(BookList(11, List("bl1", "n1")))), Book("n2", "u2", 2, List(BookList(22, List("bl2", "n2", "n1")))))
 
   val input3 = List(
     Book("n1", "u1", 1, List(BookList(11, List("bl1", "n1")), BookList(12, List("bl2", "n1")))),

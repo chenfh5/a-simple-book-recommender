@@ -2,7 +2,6 @@ package io.github.chenfh5
 
 import java.text.{DateFormat, SimpleDateFormat}
 
-
 object OwnUtils {
 
   private val sdfHiveFull = new ThreadLocal[DateFormat]() {

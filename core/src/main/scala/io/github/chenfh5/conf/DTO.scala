@@ -5,4 +5,9 @@ case class BookList(url: Long, names: List[String] = List())
 
 case class BookWeight(name: String, similar: Map[String, Int] = Map())
 
-case class RequestParameter(favorBookList: List[String], maxBookListContentSize: Int, amplifyFactor: Int, topK: Int)
+case class RequestParameter(
+    var favorBookList: List[String] = List(),
+    var maxBookListSize: Int = 0,
+    var maxBookListContentSize: Int = 0,
+    var amplifyFactor: Int = 0,
+    var topK: Int = 0)

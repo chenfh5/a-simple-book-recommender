@@ -10,16 +10,16 @@ object Bootstrap {
   private val LOG = LoggerFactory.getLogger(getClass)
 
   def main(args: Array[String]): Unit = {
-    dryRunOnce
+    dryRunOnce()
 //    dryRunServer
   }
 
-  def dryRunOnce: Unit = {
+  def dryRunOnce(): Unit = {
     val t0 = System.nanoTime()
 
     // exec
     val favorBookList = List("斗破苍穹", "武动乾坤", "大主宰")
-    val bc = new Fetcher(favorBookList, 100).getBookListContent
+    val bc = new Fetcher(favorBookList, 100, 200).getBookListContent
     val obj = new Merger(4)
     val bw = obj._map2Weight(obj.assignWeight(bc))
     val res = new Ranker(10).topK(bw)
@@ -33,8 +33,8 @@ object Bootstrap {
     }
   }
 
-  // @see http://localhost:8086/?names=斗破苍穹,武动乾坤&size=2&factor=11&k=21
-  // @see http://localhost:8086/?names=斗破苍穹,武动乾坤
+  // @see http://localhost:8086/?favorBookList=斗破苍穹,武动乾坤&maxBookListSize=2&maxBookListContentSize=201&amplifyFactor=4&topK=11
+  // @see http://localhost:8086/?favorBookList=斗破苍穹,武动乾坤
   def dryRunServer: String = {
     val g2Server = G2Server()
     g2Server.init()

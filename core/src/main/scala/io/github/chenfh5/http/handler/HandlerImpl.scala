@@ -20,7 +20,8 @@ class HandlerImpl extends HandlerTrait {
     else {
       if (requestParameter.favorBookList.nonEmpty) {
         // processing
-        val bc = new Fetcher(requestParameter.favorBookList, requestParameter.maxBookListContentSize).getBookListContent
+        val bc =
+          new Fetcher(requestParameter.favorBookList, requestParameter.maxBookListSize, requestParameter.maxBookListContentSize).getBookListContent
         val obj = new Merger(requestParameter.amplifyFactor)
         val bw = obj._map2Weight(obj.assignWeight(bc))
         val res = new Ranker(requestParameter.topK).topK(bw)
@@ -43,19 +44,20 @@ class HandlerImpl extends HandlerTrait {
 
   private def buildRequestParameter(request: Request): RequestParameter = {
     // extractor
-    val favorBookList = request.getParameter("names").split(',').toList
-    var maxBookListContentSize = request.getParameter("size")
-    var amplifyFactor = request.getParameter("factor")
-    var topK = request.getParameter("k")
-
-    // default
-    if (maxBookListContentSize == null) maxBookListContentSize = "4"
-    if (amplifyFactor == null) amplifyFactor = "3"
-    if (topK == null) topK = "10"
-
-    val res = RequestParameter(favorBookList, maxBookListContentSize.toInt, amplifyFactor.toInt, topK.toInt)
-    LOG.info("RequestParameter=%s".format(res))
-    res
+    val param = RequestParameter()
+    param.productElementNames.foreach { k =>
+      val v = request.getParameter(k)
+      k match {
+        case "favorBookList"          => if (v == null) param.favorBookList = List() else param.favorBookList = v.split(',').toList
+        case "maxBookListSize"        => if (v == null) param.maxBookListSize = 4 else param.maxBookListSize = v.toInt
+        case "maxBookListContentSize" => if (v == null) param.maxBookListContentSize = 200 else param.maxBookListContentSize = v.toInt
+        case "amplifyFactor"          => if (v == null) param.amplifyFactor = 3 else param.amplifyFactor = v.toInt
+        case "topK"                   => if (v == null) param.topK = 10 else param.topK = v.toInt
+        case _                        =>
+      }
+    }
+    LOG.info("RequestParameter=%s".format(param))
+    param
   }
 
   private def write2Response(response: Response, res: Map[String, List[(String, Int)]]): Unit = {

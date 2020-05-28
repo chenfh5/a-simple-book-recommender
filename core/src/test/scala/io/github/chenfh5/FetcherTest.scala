@@ -3,10 +3,11 @@ package io.github.chenfh5
 import io.github.chenfh5.conf.Book
 import io.github.chenfh5.process.Fetcher
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfter, FunSuite}
+import org.scalatest.BeforeAndAfter
+import org.scalatest.funsuite.AnyFunSuite
 import org.slf4j.LoggerFactory
 
-class FetcherTest extends FunSuite with MockFactory with BeforeAndAfter {
+class FetcherTest extends AnyFunSuite with MockFactory with BeforeAndAfter {
   private val LOG = LoggerFactory.getLogger(getClass)
   private val obj = stub[Fetcher]
 

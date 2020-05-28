@@ -5,10 +5,11 @@ import io.github.chenfh5.conf.{Book, BookList}
 import org.jsoup.Jsoup
 import org.slf4j.LoggerFactory
 
-import scala.collection.JavaConverters._
+import scala.collection.parallel.CollectionConverters._
+import scala.jdk.CollectionConverters._
 import scala.util.Random
 
-class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
+class Fetcher(queryBooks: List[String], maxBookListSize: Int, maxBookListContentSize: Int) {
 
   private val LOG = LoggerFactory.getLogger(getClass)
   private val prefix = "https://www.google.com/search?q=site%3Awww.qidiantu.com%2Finfo+"
@@ -117,10 +118,10 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
     val res = books.par.map {
       case Book(n, u, p, bl) =>
         val input =
-          if (bl.size <= maxBookListContentSize) bl
+          if (bl.size <= maxBookListSize) bl
           else {
-            if (LOG.isDebugEnabled) LOG.debug("need random pick")
-            Random.shuffle(bl).take(maxBookListContentSize)
+            if (LOG.isDebugEnabled) LOG.debug("need random pick bookLists")
+            Random.shuffle(bl).take(maxBookListSize)
           }
         val tmp = input.par
           .map {
@@ -130,7 +131,12 @@ class Fetcher(queryBooks: List[String], maxBookListContentSize: Int = 2) {
               val name = try {
                 val doc = Jsoup.connect(url).get
                 val headlines = doc.select("div.media-body a h4")
-                headlines.asScala.map(h => h.text().trim).toList.filter(_.nonEmpty)
+                val content = headlines.asScala.map(h => h.text().trim).toList.filter(_.nonEmpty)
+                if (content.size <= maxBookListContentSize) content
+                else {
+                  if (LOG.isDebugEnabled) LOG.debug("need random pick bookListContent")
+                  Random.shuffle(content).take(maxBookListContentSize)
+                }
               } catch {
                 case e: Throwable =>
                   LOG.warn("get content failed %s".format(e.getMessage))

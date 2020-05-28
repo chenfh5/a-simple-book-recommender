@@ -10,8 +10,7 @@ class G2Server extends Server {
 
   override def init(): Unit = {
     LOG.info(s"G2Server host=${OwnConfig.SERVER_HOST}, port=${OwnConfig.HTTP_SERVER_PORT}")
-    server.addListener(
-      new NetworkListener("chenfh5 grizzly http server", OwnConfig.SERVER_HOST, OwnConfig.HTTP_SERVER_PORT))
+    server.addListener(new NetworkListener("chenfh5 grizzly http server", OwnConfig.SERVER_HOST, OwnConfig.HTTP_SERVER_PORT))
     addHandler()
   }
 

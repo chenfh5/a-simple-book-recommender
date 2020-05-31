@@ -10,8 +10,8 @@ object Bootstrap {
   private val LOG = LoggerFactory.getLogger(getClass)
 
   def main(args: Array[String]): Unit = {
-//    dryRunOnce()
-    dryRunServer
+    dryRunOnce()
+//    dryRunServer
   }
 
   def dryRunOnce(): Unit = {

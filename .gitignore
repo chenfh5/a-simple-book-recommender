@@ -40,3 +40,4 @@ hs_err_pid*
 *.iml
 TestOnly.scala
 /log/
+/core/log/

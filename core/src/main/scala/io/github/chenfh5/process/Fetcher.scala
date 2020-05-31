@@ -16,6 +16,7 @@ class Fetcher(queryBooks: List[String], maxBookListSize: Int, maxBookListContent
   private val bookUrlPattern = """(http|https)://www.qidiantu.com/info/\d+/(c|c/\d+)""".r
   private val pageNumPattern = """/info/\d+/c/(\d+)""".r
   private val bookListUrlPattern = """/booklist/(\d+)""".r
+  private val bookListContentSizePattern = """.+\((\d+)本书.+\)""".r
   private val bookListUrl = "https://www.qidiantu.com/booklist"
 
   def _getBookIdFromGoogle: List[Book] = {
@@ -90,15 +91,32 @@ class Fetcher(queryBooks: List[String], maxBookListSize: Int, maxBookListContent
           val url = "%s/%d".format(u, d)
           if (LOG.isDebugEnabled) LOG.debug("searching url=%s".format(url))
           val doc = Jsoup.connect(url).get
-          val headlines = doc.select("div.panel-footer a")
+          val headlines = doc.select("div.panel-footer")
           val tmp = headlines.asScala.map { h =>
-            val url = h.attr("href")
-            url match {
-              case bookListUrlPattern(url) =>
-                url.toLong
+            // bookListContentSize
+            val txt = h.text
+            val bookListContentSize = txt match {
+              case bookListContentSizePattern(txt) =>
+                txt.toInt
               case _ =>
-                if (LOG.isDebugEnabled) LOG.debug("url=%s is not match".format(url))
+                if (LOG.isDebugEnabled) LOG.debug("txt=%s is not match bookListContentSizePattern".format(txt))
                 -1
+            }
+
+            // valid url
+            if (bookListContentSize != -1 && bookListContentSize <= maxBookListContentSize) {
+              val url = h.select("a").attr("href")
+              url match {
+                case bookListUrlPattern(url) =>
+                  url.toLong
+                case _ =>
+                  if (LOG.isDebugEnabled) LOG.debug("url=%s is not match bookListUrlPattern".format(url))
+                  -1
+              }
+            }
+            else {
+              if (LOG.isDebugEnabled) LOG.debug("size =%s exceed bookListContentSizePattern".format(bookListContentSize))
+              -1
             }
           }
           tmp.filter(_ != -1)
@@ -131,12 +149,7 @@ class Fetcher(queryBooks: List[String], maxBookListSize: Int, maxBookListContent
               val name = try {
                 val doc = Jsoup.connect(url).get
                 val headlines = doc.select("div.media-body a h4")
-                val content = headlines.asScala.map(h => h.text().trim).toList.filter(_.nonEmpty)
-                if (content.size <= maxBookListContentSize) content
-                else {
-                  if (LOG.isDebugEnabled) LOG.debug("need random pick bookListContent")
-                  Random.shuffle(content).take(maxBookListContentSize)
-                }
+                headlines.asScala.map(h => h.text().trim).toList.filter(_.nonEmpty)
               } catch {
                 case e: Throwable =>
                   LOG.warn("get content failed %s".format(e.getMessage))
